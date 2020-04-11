@@ -163,12 +163,12 @@ render() {
   const props = {
 	  [propName]: this.state.hovering,
     ...this.props,
-	}
+  }
 
-	return (
-		<div onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
-			<Component {...props} />
-		</div>
-	);
+  return (
+    <div onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
+      <Component {...props} />
+    </div>
+  );
 }
 ```
