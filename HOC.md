@@ -160,9 +160,9 @@ const InfoWithHover = withHover(Info, 'showTooltip')
 ## Pass value to the Component created by HOC
 ```
 render() {
-	const props = {
-		[propName]: this.state.hovering,
-		...this.props,
+  const props = {
+	  [propName]: this.state.hovering,
+    ...this.props,
 	}
 
 	return (
