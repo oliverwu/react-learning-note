@@ -161,14 +161,14 @@ const InfoWithHover = withHover(Info, 'showTooltip')
 ```
 render() {
 	const props = {
-	[propName]: this.state.hovering,
-	...this.props,
+		[propName]: this.state.hovering,
+		...this.props,
 	}
 
 	return (
-	<div onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
-		<Component {...props} />
-	</div>
+		<div onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
+			<Component {...props} />
+		</div>
 	);
 }
 ```
