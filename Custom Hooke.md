@@ -120,3 +120,153 @@ function App() {
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
 ```
+
+* **useWindowDimensions**
+```
+import React, { useState, useEffect } from "react"
+import ReactDOM from "react-dom"
+
+import "./styles.css"
+
+/*
+  Instructions:
+    You're given a `useWindowDimensions` custom Hook. Your
+    job is to finish implementing it. It should return
+    an object with a `width` property that represents the current
+    width of the window and a `height` property which represents
+    the current height. 
+
+    To get those values, you can use teh `window.addEventListener`
+    API.https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
+*/
+
+function useWindowDimensions() {
+  const [width, setWidth] = useState(window.innerWidth)
+  const [height, setHeight] = useState(window.innerHeight)
+
+  function reportWindowSize() {
+    setWidth(window.innerWidth)
+    setHeight(window.innerHeight)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', reportWindowSize)
+    return () => {
+      window.removeEventListener('resize', reportWindowSize)
+    }
+  }, [])
+
+  return {width, height}
+}
+
+
+function App() {
+  const { width, height } = useWindowDimensions()
+
+  return (
+    <div className="App">
+      <h2>width: {width}</h2>
+      <h2>height: {height}</h2>
+      <p>Resize the window.</p>
+    </div>
+  )
+}
+
+const rootElement = document.getElementById("root")
+ReactDOM.render(<App />, rootElement)
+```
+
+* **useFetch**
+```
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import axios from 'axios';
+
+import "./styles.css";
+
+/*
+  Instructions:
+    Implement the `useFetch` function. 
+*/
+
+function useFetch (url) {
+  const [loading, setLoading] = React.useState(true)
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
+  
+  useEffect(() => {
+    setLoading(true)
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url)
+        const data = response.data
+        // setLoading(false)
+        setData(data)
+        setError(null)
+        setLoading(false)
+      } catch(e) {
+        setError(e)
+        setLoading(false)
+      }
+      
+    }
+   fetchData()
+  }, [url])
+
+
+
+  return {
+    loading,
+    data,
+    error
+  }
+}
+
+const postIds = [1,2,3,4,5,6,7,8]
+
+function App() {
+  const [index, setIndex] = React.useState(0)
+
+
+  const { loading, data: post, error }= useFetch(
+    `https://jsonplaceholder.typicode.com/posts/${postIds[index]}`
+  )
+  console.log(loading, post)
+
+  const incrementIndex = () => {
+    setIndex((i) => 
+      i === postIds.length - 1
+        ? i
+        : i + 1
+    )
+  }
+
+  if (loading === true) {
+    return <p>Loading</p>
+  }
+
+  if (error) {
+    return (
+      <React.Fragment>
+        <p>{error}</p>
+        <button onClick={incrementIndex}>Next Post</button>
+      </React.Fragment>
+    )
+  }
+
+  return (
+    <div className="App">
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+      {index === postIds.length - 1 
+        ? <p>No more posts</p>
+        : <button onClick={incrementIndex}>
+            Next Post
+          </button>}
+    </div>
+  );
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
+```
